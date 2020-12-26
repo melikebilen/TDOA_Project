@@ -1,92 +1,68 @@
 import csv
 import numpy as np
 import random
-import math
 from matplotlib import pyplot as plt
 
-with open('new.csv') as csvfile:
+with open('tdoa.csv') as csvfile:
     readCSV = csv.reader(csvfile)
-    distancelist = []
     x_list = []
     y_list = []
-
     distance_array = []
-    calculated_time_of_reception = []
+    time_of_reception = []
+    Standard_Deviation = random.random() / 100;  # A random number from 0 to 1
 
     x = ()
     y = ()
 
-
     for column in readCSV:
-        distance = column[2]
         x_points = column[0]
         y_points = column[1]
+        time = column[2]
 
-
-        distancelist.append(distance)
         x_list.append(x_points)
         y_list.append(y_points)
-
+        time_of_reception.append(time)
 
 #Removing the headings
-    distancelist.remove('distance');
+    time_of_reception.remove('time of reception');
     x_list.remove('receiver x');
     y_list.remove('receiver y');
 
-
 #Getting float values from the strings
-    for i in range(0, len(distancelist)):
-        distancelist[i] = float(distancelist[i])
+    for i in range(0, len(time_of_reception)):
+        time_of_reception[i] = float(time_of_reception[i]) + Standard_Deviation
         x_list[i] = float(x_list[i])
         y_list[i] = float(y_list[i])
 
-    Standard_Deviation = random.random(); # A random number from 0 to 1
-#Distance array'i kendi hesapladığımı daha düzgün şekilde kullanabilmek için aldım.
-    for i in distancelist:
-        x = math.sqrt(i);
+#We obtain the distances with the help of the time.
+    for i in time_of_reception:
+        x = i * 343;
         distance_array.append(x);
 
-#Zamanı kendim hesaplıyorum;
-    for i in distance_array:
-        x = (i/343);
-        calculated_time_of_reception.append(x);
-
-#DECIDING WHICH RECEIVER IS GOING TO BE THE REFERENCE.
+#We are going to choose the closest receiver to be the reference and here we decide which receiver is going to be the reference
     closestReceiversDistance = min(distance_array);
     index_of_closest_receiver = distance_array.index(closestReceiversDistance);
-    t0= closestReceiversDistance
-    #print(index_of_closest_receiver)
 
 #Changing lists to np.arrays
-    distancelist = np.array(distancelist)
     x_list = np.array(x_list)
     y_list = np.array(y_list)
-
     distance_array = np.array(distance_array)
-    calculated_time_of_reception = np.array(calculated_time_of_reception)
+    time_of_reception = np.array(time_of_reception)
 
-    receiver1 = [x_list[0], y_list[0], distance_array[0], calculated_time_of_reception[0]]
-    receiver2 = [x_list[1], y_list[1], distance_array[1], calculated_time_of_reception[1]]
-    receiver3 = [x_list[2], y_list[2], distance_array[2], calculated_time_of_reception[2]]
-    receiver4 = [x_list[3], y_list[3], distance_array[3], calculated_time_of_reception[3]]
+    receiver1 = [x_list[0], y_list[0], distance_array[0], time_of_reception[0]]
+    receiver2 = [x_list[1], y_list[1], distance_array[1], time_of_reception[1]]
+    receiver3 = [x_list[2], y_list[2], distance_array[2], time_of_reception[2]]
+    receiver4 = [x_list[3], y_list[3], distance_array[3], time_of_reception[3]]
 
     receivers_list = [receiver1,receiver2,receiver3,receiver4]
+
     reference_receiver = receivers_list[index_of_closest_receiver]
     receivers_list.remove(receivers_list[index_of_closest_receiver])
     left_receivers = receivers_list
-
     reference_receiver = np.array(reference_receiver)
-    print('The left receivers')
     left_receivers = np.array(left_receivers)
-    print(left_receivers)
-    print('************************')
-    print('The reference receiver that I obtained')
-    print(reference_receiver)
-    print('************************')
-
 
     r1 = closestReceiversDistance;
-    print(closestReceiversDistance)
 
     A = np.array([
         [left_receivers[0][0] - reference_receiver[0], left_receivers[0][1] - reference_receiver[1]], #(left_receivers[0][3] - (reference_receiver[3]) * (343 ** 2))
@@ -122,14 +98,13 @@ with open('new.csv') as csvfile:
     print('************************')
     print(x)
     print(y)
-    print('************************')
-    print(left_receivers)
-    print(reference_receiver)
+     #print(time_of_reception)
+    print('Standard deviation')
+    print(Standard_Deviation)
+
 
     plt.scatter(x , y)
-   # plt.savefig('xyplot.png', dpi=300, bbox_inches='tight')
+    # plt.savefig('xyplot.png', dpi=300, bbox_inches='tight')
     plt.show()
-
-
-
-#working on yayan article, tdoa
+    
+#working on yayan article
