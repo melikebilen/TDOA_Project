@@ -141,8 +141,8 @@ with open('tdoa.csv') as csvfile:
         errCount = math.sqrt((knownX - x) ** 2 + (knownY - y) ** 2)
         error_List.append(errCount)
 
-        plt.scatter(x, y, color='red')
-        plt.savefig('xyplot.png', dpi=300, bbox_inches='tight')
+        #plt.scatter(x, y, color='red')
+        #plt.savefig('xyplot.png', dpi=300, bbox_inches='tight')
 
         #print('************************')
         #print(x)
@@ -168,21 +168,45 @@ with open('tdoa.csv') as csvfile:
     print(final_x)
     print(final_y)
 
+
+    counts = db.child("Count").get()
+    oldCount = ();
+    newCount = ();
+    if counts.val():
+        oldCount = counts.val().get('count')
+        newCount = oldCount + 1
+        print(oldCount)
+        print(newCount)
+    else:
+        oldCount = 0
+        newCount = oldCount + 1
+
+
+    countString = newCount.__str__()
     # The data that we are going to push to the firebase
     data = {
         "x": final_x, #x  x and y are the last ones from the while loop
         "y": final_y #y
     }
+    count = {
+        "count": newCount
+    }
     #db.child("Location").update(data)
-    db.child("Location").push(data)
+    db.child("Count").update(count)
+    db.child("Location".__add__(countString)).update(data)
 
     plt.xlabel("X axis")
     plt.ylabel("Y axis")
-    plt.scatter(final_x , final_y, color='blue')
-    plt.scatter(knownX, knownY, color='green')
-    plt.tight_layout()
-    plt.savefig('xyplot.png', dpi=300, bbox_inches='tight')
+    plt.grid()
 
+    plt.xlim(0, 10)
+    plt.ylim(0, 5)
+
+    plt.scatter(final_x , final_y, color='blue') #The average point
+    plt.scatter(knownX, knownY, color='green') #True Point
+
+    plt.savefig('xyplot.png', dpi=300, bbox_inches='tight')
     path_on_cloud = "images/xyplot.png"
     path_local = "xyplot.png"
-    storage.child(path_on_cloud).put(path_local)
+
+    storage.child(path_on_cloud.__add__(countString)).put(path_local)

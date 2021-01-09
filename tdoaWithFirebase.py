@@ -26,7 +26,7 @@ with open('tdoa.csv') as csvfile:
     distance_array = []
     time_of_reception = []
     standard_deviation_list = []
-    Standard_Deviation = random.random() / 100;  # A random number from 0 to 1
+    Standard_Deviation = random.gauss(0, 0.001) ;  # A random number from 0 to 1
     count = 0
 
     x = ()
@@ -113,10 +113,8 @@ with open('tdoa.csv') as csvfile:
     y = t[1] + reference_receiver[1]
 
 
-    print('************************')
     print(x)
     print(y)
-    #print(time_of_reception)
     print('Standard deviation')
     print(Standard_Deviation)
 
@@ -132,5 +130,4 @@ with open('tdoa.csv') as csvfile:
         "x" : x,
         "y" : y
     }
-
     db.child("Location").update(data)
