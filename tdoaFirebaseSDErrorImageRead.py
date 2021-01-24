@@ -2,6 +2,8 @@ import csv
 import numpy as np
 import random
 from matplotlib import pyplot as plt
+import mpld3 as mpld3
+from collections import OrderedDict
 import pyrebase
 import math
 
@@ -28,11 +30,8 @@ with open('tdoa.csv') as csvfile:
     y_list = []
     distance_array = []
     time_of_reception = []
-    error_List = []
     x = ()
     y = ()
-    knownX = 3
-    knownY = 4
 
     for column in readCSV:
         x_points = column[0]
@@ -138,35 +137,19 @@ with open('tdoa.csv') as csvfile:
         x = t[0] + reference_receiver[0]
         y = t[1] + reference_receiver[1]
 
-        errCount = math.sqrt((knownX - x) ** 2 + (knownY - y) ** 2)
-        error_List.append(errCount)
-
-        #plt.scatter(x, y, color='red')
-        #plt.savefig('xyplot.png', dpi=300, bbox_inches='tight')
-
-        #print('************************')
-        #print(x)
-        #print(y)
-        #print('************************')
         average_x_list.append(x)
         average_y_list.append(y)
         count = count + 1
 
-    errorSum = 0
-    for i in error_List:
-        errorSum = (i ** 2) + errorSum;
-    error = math.sqrt((errorSum / len(error_List)))
 
-    print('Error')
-    print(error)
     final_x = sum(average_x_list) / len(average_x_list)
     final_y = sum(average_y_list) / len(average_y_list)
-    #print(average_x_list)
-    #print(average_y_list)
 
     print('Final X and Y Points ')
     print(final_x)
     print(final_y)
+
+
 
 
     counts = db.child("Count").get()
@@ -175,12 +158,9 @@ with open('tdoa.csv') as csvfile:
     if counts.val():
         oldCount = counts.val().get('count')
         newCount = oldCount + 1
-        print(oldCount)
-        print(newCount)
     else:
         oldCount = 0
         newCount = oldCount + 1
-
 
     countString = newCount.__str__()
     # The data that we are going to push to the firebase
@@ -191,9 +171,36 @@ with open('tdoa.csv') as csvfile:
     count = {
         "count": newCount
     }
-    #db.child("Location").update(data)
+    X_Point = {
+        "x".__add__(countString): final_x,  # x
+    }
+    Y_Point= {
+        "y".__add__(countString): final_y  # y
+    }
+
+
+
     db.child("Count").update(count)
     db.child("Location".__add__(countString)).update(data)
+    db.child("RobotLocation").update(data)
+    db.child("X_List").update(X_Point)
+    db.child("Y_List").update(Y_Point)
+
+    x_list_from_fb = db.child("X_List").get()
+    x_list_Dictionary = x_list_from_fb.val()
+
+    y_list_from_fb = db.child("Y_List").get()
+    y_list_Dictionary = y_list_from_fb.val()
+
+    x_list_to_image = []
+    y_list_to_image = []
+
+    for i in y_list_Dictionary:
+        y_list_to_image.append(y_list_Dictionary[i])
+
+    for i in x_list_Dictionary:
+        x_list_to_image.append(x_list_Dictionary[i])
+
 
     plt.xlabel("X axis")
     plt.ylabel("Y axis")
@@ -202,11 +209,12 @@ with open('tdoa.csv') as csvfile:
     plt.xlim(0, 10)
     plt.ylim(0, 5)
 
-    plt.scatter(final_x , final_y, color='blue') #The average point
-    plt.scatter(knownX, knownY, color='green') #True Point
+
+    plt.scatter(x_list_to_image , y_list_to_image, zorder=2, color='blue') #The average point
+
 
     plt.savefig('xyplot.png', dpi=300, bbox_inches='tight')
     path_on_cloud = "images/xyplot.png"
     path_local = "xyplot.png"
-
+    storage.child(path_on_cloud).put(path_local)
     storage.child(path_on_cloud.__add__(countString)).put(path_local)
