@@ -81,16 +81,15 @@ with open('new.csv') as csvfile:
     print('************************')
     print('The reference receiver that I obtained')
     print(reference_receiver)
-    print('************************')
 
 
     r1 = closestReceiversDistance;
-    print(closestReceiversDistance)
+    #print(closestReceiversDistance)
 
     A = np.array([
-        [left_receivers[0][0] - reference_receiver[0], left_receivers[0][1] - reference_receiver[1]], #(left_receivers[0][3] - (reference_receiver[3]) * (343 ** 2))
-        [left_receivers[1][0] - reference_receiver[0], left_receivers[1][1] - reference_receiver[1]], # (left_receivers[1][3] - (reference_receiver[3]) * (343 ** 2))
-        [left_receivers[2][0] - reference_receiver[0], left_receivers[2][1] - reference_receiver[1]], #(left_receivers[2][3] - (reference_receiver[3]) * (343 ** 2))
+        [left_receivers[0][0] - reference_receiver[0], left_receivers[0][1] - reference_receiver[1]],
+        [left_receivers[1][0] - reference_receiver[0], left_receivers[1][1] - reference_receiver[1]],
+        [left_receivers[2][0] - reference_receiver[0], left_receivers[2][1] - reference_receiver[1]],
     ])
 
     c = np.array([
@@ -119,9 +118,11 @@ with open('new.csv') as csvfile:
     x = t[0] + reference_receiver[0]
     y = t[1] + reference_receiver[1]
 
-    print(t)
+    #(t)
     print('************************')
+    print('X point:')
     print(x)
+    print('Y point:')
     print(y)
 
 

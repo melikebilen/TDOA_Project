@@ -22,7 +22,7 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 storage = firebase.storage()
 db = firebase.database()
 
-with open('tdoa.csv') as csvfile:
+with open('tdoa1.csv') as csvfile:
     readCSV = csv.reader(csvfile)
     average_x_list = []
     average_y_list = []
@@ -202,8 +202,8 @@ with open('tdoa.csv') as csvfile:
         x_list_to_image.append(x_list_Dictionary[i])
 
 
-    plt.xlabel("X axis")
-    plt.ylabel("Y axis")
+    plt.xlabel("X axis / X value: ".__add__(str(final_x)))
+    plt.ylabel("Y axis / Y value: ".__add__(str(final_y)))
     plt.grid()
 
     plt.xlim(0, 10)
@@ -211,6 +211,8 @@ with open('tdoa.csv') as csvfile:
 
 
     plt.scatter(x_list_to_image , y_list_to_image, zorder=2, color='blue') #The average point
+    plt.plot(x_list_to_image,y_list_to_image,zorder=2,linewidth=2 ,color='red')
+    #plt.arrow(x_list_to_image,y_list_to_image,x_list_to_image,y_list_to_image,head_width=0.05, head_length=0.1, fc='k', ec='k')
 
 
     plt.savefig('xyplot.png', dpi=300, bbox_inches='tight')

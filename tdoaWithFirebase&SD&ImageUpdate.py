@@ -59,8 +59,6 @@ with open('tdoa.csv') as csvfile:
         distance_array = []
         time_of_reception = T
 
-        #Standard_Deviation = random.gauss(0, 0.001);  # A random number from 0 to 1
-
         # Getting float values from the strings
         for i in range(0, len(time_of_reception)):
             time_of_reception[i] = float(time_of_reception[i]) + random.gauss(0, 0.0001)
@@ -157,7 +155,7 @@ with open('tdoa.csv') as csvfile:
         errorSum = (i ** 2) + errorSum;
     error = math.sqrt((errorSum / len(error_List)))
 
-    print('Error')
+    print('RMSE')
     print(error)
     final_x = sum(average_x_list) / len(average_x_list)
     final_y = sum(average_y_list) / len(average_y_list)
@@ -175,8 +173,8 @@ with open('tdoa.csv') as csvfile:
     if counts.val():
         oldCount = counts.val().get('count')
         newCount = oldCount + 1
-        print(oldCount)
-        print(newCount)
+        #print(oldCount)
+        #print(newCount)
     else:
         oldCount = 0
         newCount = oldCount + 1
