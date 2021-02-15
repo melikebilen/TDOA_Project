@@ -98,11 +98,8 @@ with open('tdoa1.csv') as csvfile:
 
         A = np.array([
             [left_receivers[0][0] - reference_receiver[0], left_receivers[0][1] - reference_receiver[1]],
-            # (left_receivers[0][3] - (reference_receiver[3]) * (343 ** 2))
             [left_receivers[1][0] - reference_receiver[0], left_receivers[1][1] - reference_receiver[1]],
-            # (left_receivers[1][3] - (reference_receiver[3]) * (343 ** 2))
             [left_receivers[2][0] - reference_receiver[0], left_receivers[2][1] - reference_receiver[1]],
-            # (left_receivers[2][3] - (reference_receiver[3]) * (343 ** 2))
         ])
 
         c = np.array([
@@ -126,11 +123,9 @@ with open('tdoa1.csv') as csvfile:
         inverse = np.linalg.inv(AxA_Trans)
         inverseXA_Trans = np.dot(inverse, A_Trans)
         lefthandside = np.dot(0.5, inverseXA_Trans)
-
         r1x2 = r1 * 2;
         r1x2_d = np.dot(r1x2, d)
         righthandside = np.add(c, r1x2_d)
-
         t = np.dot(lefthandside, righthandside)
 
         # t contains x= unknownX - referenceX
@@ -141,16 +136,12 @@ with open('tdoa1.csv') as csvfile:
         average_y_list.append(y)
         count = count + 1
 
-
     final_x = sum(average_x_list) / len(average_x_list)
     final_y = sum(average_y_list) / len(average_y_list)
 
     print('Final X and Y Points ')
     print(final_x)
     print(final_y)
-
-
-
 
     counts = db.child("Count").get()
     oldCount = ();
