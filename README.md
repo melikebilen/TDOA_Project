@@ -29,7 +29,7 @@ Y values calculated everytime the code is run.
     
    ## Steps to use the code
    
-    1) Make sure you have the IDE that you prefer, I have used PyCharm Community Edition. Make sure you have Android 
+    1) Make sure you have the IDE that you prefer, I have used PyCharm Community Edition.
    
     2) After setting up the environment, you can download the zip file. You should unzip the file that you have downloaded. 
     
