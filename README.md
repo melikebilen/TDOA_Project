@@ -12,7 +12,7 @@ Y values calculated everytime the code is run.
  ## Firebase
     To be able to use all the features of the application, you must use Firebase. Please check out the link below and make sure you follow the steps.
   
-    https://firebase.google.com/docs/flutter/setup
+    https://firebase.google.com/docs/web/setup
   
   ## Versions
    Python version: 1.0.0+1
